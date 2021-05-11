@@ -1,2 +1,4 @@
 # uniplugin_module_filechooser
 uniapp简易安卓端打开系统文件选择器和文件上传
+
+example.vue

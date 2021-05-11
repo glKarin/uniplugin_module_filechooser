@@ -1,0 +1,14 @@
+{
+  "nativePlugins": [
+    {
+      "hooksClass": "",
+      "plugins": [
+        {
+          "type": "module",
+          "name": "uniplugin_module_filechooser",
+          "class": "com.pengniaoyun.uniplugin_module_filechooser.FileChooser"
+        }
+      ]
+    }
+  ]
+}
