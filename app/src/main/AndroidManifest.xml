@@ -139,8 +139,13 @@
                 android:resource="@xml/dcloud_file_provider" />
         </provider>
 
+        <!-- debug测试包 -->
         <meta-data
             android:name="dcloud_appkey"
             android:value="" />
+        <!-- 打带证书的正式包 -->
+        <!--<meta-data
+        android:name="dcloud_appkey"
+        android:value="" />-->
     </application>
 </manifest>

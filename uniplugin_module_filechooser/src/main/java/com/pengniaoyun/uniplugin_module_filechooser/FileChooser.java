@@ -2,6 +2,7 @@ package com.pengniaoyun.uniplugin_module_filechooser;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 import com.alibaba.fastjson.JSONObject;
@@ -150,8 +151,9 @@ public class FileChooser extends UniModule
 
     private void Log(String str)
     {
-        UniLogUtils.e(str);
-        Logf.w(ID_TAG, str);
+        UniLogUtils.w(str);
+        Logf.e(ID_TAG, str);
+        //LogF(mUniSDKInstance.getContext(), str);
     }
 
     @UniJSMethod(uiThread = false)
@@ -190,21 +192,26 @@ public class FileChooser extends UniModule
     @UniJSMethod(uiThread = true)
     public void flogf(String params)
     {
-        Log("flogf");
+        //Log("flogf");
         if(!ActivityUtility.IsGrantPermission(mUniSDKInstance.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE))
         {
             Log("WRITE_EXTERNAL_STORAGE permission is not granted!");
             return;
         }
 
-        final String filePath = mUniSDKInstance.getContext().getExternalCacheDir().getParent()
+        LogF(mUniSDKInstance.getContext(), params);
+    }
+
+    public static void LogF(Context context, String params, Object...args)
+    {
+        final String filePath = context.getExternalCacheDir().getParent()
                 + File.separator + "uniplugin_module_filechooser"
                 + File.separator + "filechooser_"
                 + Common.TimestampToDateStr(System.currentTimeMillis()) + ".log";
 
         Logf.e(filePath);
-        Logf.f(filePath, ID_TAG, params);
-        Logf.e(ID_TAG, params);
-        UniLogUtils.e(params);
+        Logf.f(filePath, ID_TAG, params, args);
+        Logf.e(ID_TAG, params, args);
+        UniLogUtils.e(String.format(params, args));
     }
 }

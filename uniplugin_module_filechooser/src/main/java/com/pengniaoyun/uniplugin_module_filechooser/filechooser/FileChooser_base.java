@@ -3,6 +3,7 @@ package com.pengniaoyun.uniplugin_module_filechooser.filechooser;
 import android.content.Context;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pengniaoyun.uniplugin_module_filechooser.FileChooser;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallRequestStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallFileChooserResultStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallResultStruct;
@@ -26,8 +27,9 @@ public abstract class FileChooser_base implements FileChooserInterface
 
     protected void Log(String str)
     {
-        UniLogUtils.e(str);
-        Logf.w(ID_TAG, str);
+        UniLogUtils.w(str);
+        Logf.e(ID_TAG, str);
+        //FileChooser.LogF(m_context, str);
     }
 
     protected JSONObject MakeResultJson(CallRequestStruct req, CallResultStruct res)

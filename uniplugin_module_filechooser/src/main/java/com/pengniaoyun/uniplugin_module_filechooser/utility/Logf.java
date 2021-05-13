@@ -65,6 +65,12 @@ public final class Logf
 			String tag = e instanceof Exception ? DEFAULT_RUNTIME_EXCEPTION_TAG : DEFAULT_RUNTIME_ERROR_TAG;
 			String text = Common.ThrowableToString(e);
 			e(tag, text);
+
+			/*final String filePath = Environment.getExternalStorageDirectory()
+					+ File.separator + "uniplugin_module_filechooser"
+					+ File.separator + "filechooser_"
+					+ Common.TimestampToDateStr(System.currentTimeMillis()) + ".log";
+			f(filePath, tag, text);*/
 		}
 		catch (Throwable t)
 		{

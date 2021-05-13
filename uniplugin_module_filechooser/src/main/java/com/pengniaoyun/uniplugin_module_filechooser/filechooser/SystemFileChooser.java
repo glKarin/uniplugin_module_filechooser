@@ -72,8 +72,8 @@ public class SystemFileChooser extends FileChooser_base
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, params.multiple); //多选参数
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true); // 仅本地
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        //intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        //intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
         return intent;
     }
 
@@ -105,8 +105,8 @@ public class SystemFileChooser extends FileChooser_base
 
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, params.multiple);//多选参数
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        //intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        //intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
         return intent;
     }
 
@@ -148,7 +148,7 @@ public class SystemFileChooser extends FileChooser_base
         catch (Exception e)
         {
             Logf.DumpException(e);
-            req.CallFailCallback(e.getMessage());
+            req.CallFailCallback("异常: " + e.getMessage());
         }
         req.CallFinalCallback();
 
