@@ -3,6 +3,8 @@ package com.pengniaoyun.uniplugin_module_filechooser.utility;
 import android.os.Environment;
 import android.util.Log;
 
+import com.pengniaoyun.uniplugin_module_filechooser.call.EventListener;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -65,7 +67,6 @@ public final class Logf
 			String tag = e instanceof Exception ? DEFAULT_RUNTIME_EXCEPTION_TAG : DEFAULT_RUNTIME_ERROR_TAG;
 			String text = Common.ThrowableToString(e);
 			e(tag, text);
-
 			/*final String filePath = Environment.getExternalStorageDirectory()
 					+ File.separator + "uniplugin_module_filechooser"
 					+ File.separator + "filechooser_"

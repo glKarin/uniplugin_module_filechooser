@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.pengniaoyun.uniplugin_module_filechooser.common.CallException;
 import com.pengniaoyun.uniplugin_module_filechooser.common.Constants;
+import com.pengniaoyun.uniplugin_module_filechooser.common.ModuleUtility;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.Common;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.STL;
@@ -106,7 +107,7 @@ public class CallFileUploadParamStruct extends CallParamStruct
                     }
                     catch (Exception e)
                     {
-                        Logf.DumpException(e);
+                        ModuleUtility.DumpException(e);
                         dataType = Constants.ENUM_FILE_UPLOAD_DATA_TYPE_TEXT;
                     }
                 }
@@ -122,7 +123,7 @@ public class CallFileUploadParamStruct extends CallParamStruct
                     }
                     catch (Exception e)
                     {
-                        Logf.DumpException(e);
+                        ModuleUtility.DumpException(e);
                     }
                     dataType = Constants.ENUM_FILE_UPLOAD_DATA_TYPE_TEXT;
                 }

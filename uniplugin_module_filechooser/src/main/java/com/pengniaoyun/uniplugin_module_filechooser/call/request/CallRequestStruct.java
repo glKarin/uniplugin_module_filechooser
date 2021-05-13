@@ -3,6 +3,7 @@ package com.pengniaoyun.uniplugin_module_filechooser.call.request;
 import android.support.annotation.NonNull;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pengniaoyun.uniplugin_module_filechooser.common.ModuleUtility;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
 
 import io.dcloud.feature.uniapp.bridge.UniJSCallback;
@@ -59,7 +60,7 @@ public class CallRequestStruct
         }
         catch (Exception e)
         {
-            Logf.DumpException(e);
+            ModuleUtility.DumpException(e);
             return null;
         }
     }

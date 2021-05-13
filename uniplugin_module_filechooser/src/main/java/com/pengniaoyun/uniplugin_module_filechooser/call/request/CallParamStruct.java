@@ -1,6 +1,7 @@
 package com.pengniaoyun.uniplugin_module_filechooser.call.request;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pengniaoyun.uniplugin_module_filechooser.common.ModuleUtility;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
 
 public class CallParamStruct
@@ -44,7 +45,7 @@ public class CallParamStruct
         }
         catch (Exception e)
         {
-            Logf.DumpException(e);
+            ModuleUtility.DumpException(e);
             return def;
         }
     }

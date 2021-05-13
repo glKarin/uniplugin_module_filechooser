@@ -13,6 +13,8 @@ import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallRequestStru
 import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallFileChooserResultStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallResultStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.common.CallException;
+import com.pengniaoyun.uniplugin_module_filechooser.common.ModuleUtility;
+import com.pengniaoyun.uniplugin_module_filechooser.utility.Common;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.FS;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.STL;
@@ -124,6 +126,7 @@ public class SystemFileChooser extends FileChooser_base
                 {
                     result.select_count = 1;
                     String path = FS.UriPath(m_context, data.getData());
+                    Log("Single selection: " + data.getData());
                     result.AddFile(path, mimes);
                 }
                 else // 多选
@@ -132,23 +135,27 @@ public class SystemFileChooser extends FileChooser_base
                     if (clipData != null)
                     {
                         int count = clipData.getItemCount();
+                        Log("Multi selection: " + count);
                         result.select_count = count;
                         for (int i = 0; i < count; i++)
                         {
                             ClipData.Item item = clipData.getItemAt(i);
                             Uri uri = item.getUri();
+                            Log("URI-" + i + " -> " + uri);
                             String path = FS.UriPath(m_context, uri);
                             result.AddFile(path, mimes);
                         }
                     }
                 }
             }
+            else
+                Log("No selection");
             this.Callback(req, result);
         }
         catch (Exception e)
         {
-            Logf.DumpException(e);
-            req.CallFailCallback("异常: " + e.getMessage());
+            ModuleUtility.DumpException(e);
+            req.CallFailCallback(Common.ThrowableToString(e));
         }
         req.CallFinalCallback();
 

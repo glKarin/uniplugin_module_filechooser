@@ -8,7 +8,7 @@ public class Pool<T>
 {
     private static final int CONST_QUEUE_NO_BEGIN = 1;
 
-    private HashMap<String, T> m_callbackQueue;
+    private HashMap<String, T> m_callbackQueue = null;
     private int m_queueCount = 0;
 
     public Pool()

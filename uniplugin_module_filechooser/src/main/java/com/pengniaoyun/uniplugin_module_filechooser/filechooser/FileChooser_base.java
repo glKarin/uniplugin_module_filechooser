@@ -7,6 +7,7 @@ import com.pengniaoyun.uniplugin_module_filechooser.FileChooser;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallRequestStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallFileChooserResultStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallResultStruct;
+import com.pengniaoyun.uniplugin_module_filechooser.common.ModuleUtility;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
 
 import java.util.List;
@@ -27,8 +28,7 @@ public abstract class FileChooser_base implements FileChooserInterface
 
     protected void Log(String str)
     {
-        UniLogUtils.w(str);
-        Logf.e(ID_TAG, str);
+        ModuleUtility.Log(ID_TAG, str);
         //FileChooser.LogF(m_context, str);
     }
 

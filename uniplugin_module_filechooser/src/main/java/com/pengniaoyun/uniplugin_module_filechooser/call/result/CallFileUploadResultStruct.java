@@ -2,6 +2,7 @@ package com.pengniaoyun.uniplugin_module_filechooser.call.result;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pengniaoyun.uniplugin_module_filechooser.common.Constants;
+import com.pengniaoyun.uniplugin_module_filechooser.common.ModuleUtility;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class CallFileUploadResultStruct extends CallResultStruct
             }
             catch (Exception e)
             {
-                Logf.DumpException(e);
+                ModuleUtility.DumpException(e);
             }
         }
         else

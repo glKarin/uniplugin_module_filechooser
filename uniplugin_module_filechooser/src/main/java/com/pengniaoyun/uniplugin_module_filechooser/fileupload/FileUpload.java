@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallFileUploadParamStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallRequestStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallResultStruct;
+import com.pengniaoyun.uniplugin_module_filechooser.common.ModuleUtility;
 import com.pengniaoyun.uniplugin_module_filechooser.filechooser.FileChooserInterface;
 import com.pengniaoyun.uniplugin_module_filechooser.network.HttpUtility;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
@@ -30,8 +31,7 @@ public class FileUpload implements FileUploadInterface
 
     protected void Log(String str)
     {
-        UniLogUtils.e(str);
-        Logf.w("FileUpload", str);
+        ModuleUtility.Log(ID_TAG, str);
     }
 
     public Object MakeResultJson(CallRequestStruct req, CallResultStruct res)
@@ -45,12 +45,14 @@ public class FileUpload implements FileUploadInterface
         if(params == null)
         {
             data.Ref("无效参数");
+            Log("Parameter is null");
             return false;
         }
 
         if(!params.IsValid())
         {
             data.Ref("参数不合法");
+            Log("Parameter is invalid");
             return false;
         }
 
@@ -59,23 +61,25 @@ public class FileUpload implements FileUploadInterface
         byte[] res = null;
         if(isFileUpload)
         {
-            Logf.e("文件上传");
+            Log("Start -> file upload");
             Map<String, Object> param = params.CombineParam();
             res = HttpUtility.UploadFiles(params.url, params.method.toUpperCase(), param, params.header, params.timeout);
         }
         else
         {
-            Logf.e("一般请求");
+            Log("Start -> request");
             res = HttpUtility.Request(params.url, params.method.toUpperCase(), params.data, params.header, params.timeout);
         }
 
         if(res == null)
         {
             data.Ref("网络错误");
+            Log("Network error");
             return false;
         }
 
         data.Ref(res);
+        Log("Network request success");
 
         return true;
     }

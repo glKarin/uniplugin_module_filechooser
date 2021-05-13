@@ -7,11 +7,13 @@ import android.content.Intent;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pengniaoyun.uniplugin_module_filechooser.call.CallbackPool;
+import com.pengniaoyun.uniplugin_module_filechooser.call.EventListener;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallFileChooserParamStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallFileUploadParamStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallFileUploadResultStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.common.Constants;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallRequestStruct;
+import com.pengniaoyun.uniplugin_module_filechooser.common.ModuleUtility;
 import com.pengniaoyun.uniplugin_module_filechooser.filechooser.FileChooser_base;
 import com.pengniaoyun.uniplugin_module_filechooser.filechooser.SystemFileChooser;
 import com.pengniaoyun.uniplugin_module_filechooser.fileupload.FileUpload;
@@ -151,8 +153,7 @@ public class FileChooser extends UniModule
 
     private void Log(String str)
     {
-        UniLogUtils.w(str);
-        Logf.e(ID_TAG, str);
+        ModuleUtility.Log(ID_TAG, str);
         //LogF(mUniSDKInstance.getContext(), str);
     }
 
@@ -202,16 +203,72 @@ public class FileChooser extends UniModule
         LogF(mUniSDKInstance.getContext(), params);
     }
 
-    public static void LogF(Context context, String params, Object...args)
+    @UniJSMethod(uiThread = true)
+    public void logf(String params)
+    {
+        Logf.e(ID_TAG, params);
+        UniLogUtils.w(params);
+    }
+
+    public static void LogF(Context context, String params)
     {
         final String filePath = context.getExternalCacheDir().getParent()
                 + File.separator + "uniplugin_module_filechooser"
                 + File.separator + "filechooser_"
                 + Common.TimestampToDateStr(System.currentTimeMillis()) + ".log";
 
-        Logf.e(filePath);
-        Logf.f(filePath, ID_TAG, params, args);
-        Logf.e(ID_TAG, params, args);
-        UniLogUtils.e(String.format(params, args));
+        Logf.e("log file -> " + filePath);
+        Logf.f(filePath, ID_TAG, params);
+        Logf.e(ID_TAG, params);
+        UniLogUtils.w(params);
+    }
+
+    @UniJSMethod(uiThread = true)
+    public void Version(UniJSCallback callback)
+    {
+        ModuleUtility.CallUniJSCallback(callback, Constants.VERSION);
+    }
+
+    @UniJSMethod(uiThread = true)
+    public void BuildInfo(UniJSCallback callback)
+    {
+        String info = Constants.VERSION + "_"
+                + Constants.STATE + "-" + Constants.RELEASE
+                + " (" + Common.TimestampToStr(BuildConfig.BUILD_TIMESTAMP) + "_"
+                + BuildConfig.BUILD_TYPE
+                + ")"
+                ;
+        ModuleUtility.CallUniJSCallback(callback, info);
+    }
+
+    @UniJSMethod(uiThread = true)
+    public void About(UniJSCallback callback)
+    {
+        JSONObject json = new JSONObject();
+        json.put("name", Constants.NAME);
+        json.put("version", Constants.VERSION);
+        json.put("release", Constants.RELEASE);
+        json.put("dev", Constants.DEV);
+        json.put("state", Constants.STATE);
+        json.put("build_time", Common.TimestampToStr(BuildConfig.BUILD_TIMESTAMP));
+        json.put("build_type", BuildConfig.BUILD_TYPE);
+        ModuleUtility.CallUniJSCallback(callback, json);
+    }
+
+    @UniJSMethod(uiThread = true)
+    public void AddEventListener(String name, UniJSCallback callback)
+    {
+        EventListener table = EventListener.Instance();
+        if(callback != null)
+            table.AddEventListener(name, callback);
+        else
+            table.RemoveEventListener(name);
+    }
+
+    @UniJSMethod(uiThread = true)
+    public void RemoveEventListener(String name)
+    {
+        EventListener table = EventListener.Instance();
+        table.RemoveEventListener(name);
     }
 }
