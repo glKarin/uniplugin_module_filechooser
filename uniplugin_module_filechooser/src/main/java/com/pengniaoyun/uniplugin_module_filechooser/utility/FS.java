@@ -8,7 +8,12 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
+
+import com.pengniaoyun.uniplugin_module_filechooser.common.MIME;
+
+import java.io.File;
 
 public final class FS
 {
@@ -32,9 +37,60 @@ public final class FS
         return String.format("%.1f T", ((double)size / (double)TB));
     }
 
+    public static boolean CompareMIME(String in, String...targets)
+    {
+        if(TextUtils.isEmpty(in))
+            return false;
+
+        if(targets.length == 0)
+            return true;
+
+        MIME inMime = MIME.Make(in);
+        if(inMime == null)
+            return false;
+
+        for (String target : targets)
+        {
+            MIME targetMime = MIME.Make(target);
+            if(targetMime == null)
+                continue;
+            if(inMime.IsSame(targetMime))
+                return true;
+        }
+        return false;
+    }
+
+    public static String GetFileSuffix(String path)
+    {
+        File file = new File(path);
+        if (!file.exists() || file.isDirectory())
+        {
+            return null;
+        }
+        String fileName = file.getName();
+        if (fileName.equals("") || fileName.endsWith("."))
+        {
+            return "";
+        }
+        int index = fileName.lastIndexOf(".");
+        if (index != -1)
+        {
+            return fileName.substring(index + 1).toLowerCase();
+        }
+        else
+        {
+            return "";
+        }
+    }
+
     public static String FileMIME(String path)
     {
-        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl("file://" + path));
+        String ext = MimeTypeMap.getFileExtensionFromUrl("file://" + path);
+        if(TextUtils.isEmpty(ext))
+            ext = GetFileSuffix(path);
+        else
+            ext = ext.toLowerCase();
+        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
     }
 
     public static String UriPath(final Context context, final Uri uri)

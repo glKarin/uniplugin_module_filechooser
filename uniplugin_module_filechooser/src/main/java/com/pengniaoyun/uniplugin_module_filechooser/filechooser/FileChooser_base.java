@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallRequestStruct;
+import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallFileChooserResultStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallResultStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
 
@@ -32,9 +33,10 @@ public abstract class FileChooser_base implements FileChooserInterface
     protected JSONObject MakeResultJson(CallRequestStruct req, CallResultStruct res)
     {
         JSONObject map = new JSONObject();
-        List list = (List)res.data;
-        map.put("count", list.size());
-        map.put("data", list);
+        CallFileChooserResultStruct result = (CallFileChooserResultStruct)res;
+        map.put("count", result.data.size());
+        map.put("data", result.data);
+        map.put("select_count", result.select_count);
         return map;
     }
 

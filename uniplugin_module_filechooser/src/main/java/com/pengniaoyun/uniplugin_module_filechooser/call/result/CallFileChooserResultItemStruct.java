@@ -1,6 +1,10 @@
 package com.pengniaoyun.uniplugin_module_filechooser.call.result;
 
+import android.text.TextUtils;
+
+import com.pengniaoyun.uniplugin_module_filechooser.utility.Common;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.FS;
+import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
 
 import java.io.File;
 
@@ -16,21 +20,35 @@ public class CallFileChooserResultItemStruct
         return path != null;
     }
 
-    public static CallFileChooserResultItemStruct Make(String path)
+    public static CallFileChooserResultItemStruct MakeIfInMime(String path, String mimes[])
     {
-        if(path == null || path.isEmpty())
+        if(TextUtils.isEmpty(path))
             return null;
 
         File file = new File(path);
         if(!file.exists())
             return null;
 
+        String p = file.getAbsolutePath();
+        String mime = FS.FileMIME(p);
+        if(!Common.ArrayIsEmpty(mimes))
+        {
+            if(!FS.CompareMIME(mime, mimes))
+                return null;
+        }
+
         CallFileChooserResultItemStruct item = new CallFileChooserResultItemStruct();
-        item.path = file.getAbsolutePath();
+        item.path = p;
         item.size = file.length();
         item.name = file.getName();
-        item.mime = FS.FileMIME(item.path);
+        item.mime = mime;
 
         return item;
     }
+
+    public static CallFileChooserResultItemStruct Make(String path)
+    {
+        return MakeIfInMime(path, null);
+    }
+
 }

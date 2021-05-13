@@ -1,20 +1,20 @@
 package com.pengniaoyun.uniplugin_module_filechooser;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pengniaoyun.uniplugin_module_filechooser.call.CallbackPool;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallFileChooserParamStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallFileUploadParamStruct;
-import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallFileChooserResultStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallFileUploadResultStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.common.Constants;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallRequestStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.filechooser.FileChooser_base;
 import com.pengniaoyun.uniplugin_module_filechooser.filechooser.SystemFileChooser;
 import com.pengniaoyun.uniplugin_module_filechooser.fileupload.FileUpload;
+import com.pengniaoyun.uniplugin_module_filechooser.utility.ActivityUtility;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.Common;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.VarRef;
@@ -54,41 +54,32 @@ public class FileChooser extends UniModule
     }
 
     @UniJSMethod(uiThread = false)
-    public void helloworld_notui(JSONObject params, UniJSCallback callback)
+    public void helloworld_nonui(JSONObject params, UniJSCallback callback)
     {
-        Log("helloworld_notui");
+        Log("helloworld_nonui");
         if(callback != null)
             callback.invoke(params);
     }
 
     @UniJSMethod(uiThread = true)
-    public void Log_e(String str)
+    public void Test(JSONObject params, UniJSCallback callback, UniJSCallback failCallback, UniJSCallback finalCallback)
     {
-        Logf.e(str);
+        Log("Test");
+    }
+
+    @UniJSMethod(uiThread = false)
+    public void Test_nonui(JSONObject params, UniJSCallback callback, UniJSCallback failCallback, UniJSCallback finalCallback)
+    {
+        Log("Test_nonui");
     }
 
     @UniJSMethod(uiThread = true)
-    public void Log_w(String str)
+    public void OpenSystemDocumentFileChooser(JSONObject params, UniJSCallback callback, UniJSCallback failCallback, UniJSCallback finalCallback)
     {
-        Logf.w(str);
-    }
-
-    @UniJSMethod(uiThread = true)
-    public void Log_i(String str)
-    {
-        Logf.i(str);
-    }
-
-    @UniJSMethod(uiThread = true)
-    public void Log_d(String str)
-    {
-        Logf.d(str);
-    }
-
-    @UniJSMethod(uiThread = true)
-    public void Log_v(String str)
-    {
-        Logf.v(str);
+        Log("OpenSystemFileChooser");
+        JSONObject newParams = (JSONObject)params.clone();
+        newParams.put("type", Constants.ENUM_FILE_CHOOSER_TYPE_SYSTEM_DOCUMENT);
+        OpenFileChooser(newParams, callback, failCallback, finalCallback);
     }
 
     @UniJSMethod(uiThread = true)
@@ -118,7 +109,11 @@ public class FileChooser extends UniModule
         FileChooser_base fileChooser = null;
         if(Constants.ENUM_FILE_CHOOSER_TYPE_SYSTEM.equalsIgnoreCase(type))
         {
-            fileChooser = new SystemFileChooser(mUniSDKInstance.getContext());
+            fileChooser = new SystemFileChooser(mUniSDKInstance.getContext(), SystemFileChooser.ContentType_e.CONTENT_TYPE_FILE);
+        }
+        else if(Constants.ENUM_FILE_CHOOSER_TYPE_SYSTEM_DOCUMENT.equalsIgnoreCase(type))
+        {
+            fileChooser = new SystemFileChooser(mUniSDKInstance.getContext(), SystemFileChooser.ContentType_e.CONTENT_TYPE_DOCUMENT);
         }
         else
         {
@@ -156,30 +151,60 @@ public class FileChooser extends UniModule
     private void Log(String str)
     {
         UniLogUtils.e(str);
-        Log.w(ID_TAG, str);
+        Logf.w(ID_TAG, str);
     }
 
     @UniJSMethod(uiThread = false)
     public void FileUpload(JSONObject params, UniJSCallback callback, UniJSCallback failCallback, UniJSCallback finalCallback)
     {
         Log("FileUpload");
+        boolean res = false;
         CallRequestStruct req = new CallRequestStruct(Constants.ENUM_MODULE_ACTION_FILE_UPLOAD, new CallFileUploadParamStruct(params), callback, failCallback, finalCallback);
 
-        FileUpload fileUpload = new FileUpload(mUniSDKInstance.getContext());
-
-        VarRef ref = new VarRef(new Object());
-        boolean res = fileUpload.UploadFile(req, ref);
-        if(res)
+        if(ActivityUtility.IsGrantPermission(mUniSDKInstance.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE))
         {
-            CallFileUploadResultStruct result = new CallFileUploadResultStruct(req.GetParamStruct().json, req.<CallFileUploadParamStruct>GetParamStruct_T().responseType);
-            result.Set(new String(Common.<byte []>dynamic_cast(ref.Ref())));
-            req.CallCallback(result.data);
+            FileUpload fileUpload = new FileUpload(mUniSDKInstance.getContext());
+
+            VarRef ref = new VarRef(new Object());
+            res = fileUpload.UploadFile(req, ref);
+            if(res)
+            {
+                CallFileUploadResultStruct result = new CallFileUploadResultStruct(req.GetParamStruct().json, req.<CallFileUploadParamStruct>GetParamStruct_T().responseType);
+                result.Set(new String(Common.<byte []>dynamic_cast(ref.Ref())));
+                req.CallCallback(result.data);
+            }
+            else
+            {
+                req.CallFailCallback(ref.ref.toString());
+            }
         }
         else
         {
-            req.CallFailCallback(ref.ref.toString());
+            Log("READ_EXTERNAL_STORAGE permission is not granted!");
+            req.CallFailCallback("没有授予文件存储读取权限");
         }
         req.CallFinalCallback();
         Log("FileUpload -> " + (res ? "ok" : "err"));
+    }
+
+    @UniJSMethod(uiThread = true)
+    public void flogf(String params)
+    {
+        Log("flogf");
+        if(!ActivityUtility.IsGrantPermission(mUniSDKInstance.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE))
+        {
+            Log("WRITE_EXTERNAL_STORAGE permission is not granted!");
+            return;
+        }
+
+        final String filePath = mUniSDKInstance.getContext().getExternalCacheDir().getParent()
+                + File.separator + "uniplugin_module_filechooser"
+                + File.separator + "filechooser_"
+                + Common.TimestampToDateStr(System.currentTimeMillis()) + ".log";
+
+        Logf.e(filePath);
+        Logf.f(filePath, ID_TAG, params);
+        Logf.e(ID_TAG, params);
+        UniLogUtils.e(params);
     }
 }

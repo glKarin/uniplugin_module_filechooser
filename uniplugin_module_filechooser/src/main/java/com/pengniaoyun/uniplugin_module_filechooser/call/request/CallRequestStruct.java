@@ -30,6 +30,11 @@ public class CallRequestStruct
         this.final_callback = final_callback;
     }
 
+    public CallRequestStruct(String action, CallParamStruct param)
+    {
+        this(action, param, null, null, null);
+    }
+
     public CallRequestStruct(String action, CallParamStruct param, UniJSCallback callback)
     {
         this(action, param, callback, null, null);

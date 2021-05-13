@@ -4,8 +4,10 @@ public final class Constants
 {
     public static final String ENUM_MODULE_ACTION_OPEN_FILE_CHOOSER = "open_file_chooser";
     public static final String ENUM_MODULE_ACTION_FILE_UPLOAD = "file_upload";
+    public static final String ENUM_MODULE_ACTION_FILE_LOG = "log";
 
     public static final String ENUM_FILE_CHOOSER_TYPE_SYSTEM = "system";
+    public static final String ENUM_FILE_CHOOSER_TYPE_SYSTEM_DOCUMENT = "system_document";
 
     public static final String ENUM_FILE_UPLOAD_METHOD_GET = "get";
     public static final String ENUM_FILE_UPLOAD_METHOD_POST = "post";

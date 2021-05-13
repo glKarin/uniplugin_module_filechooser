@@ -1,6 +1,11 @@
 package com.pengniaoyun.uniplugin_module_filechooser.utility;
 
+import android.os.Environment;
 import android.util.Log;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public final class Logf
 {
@@ -16,11 +21,50 @@ public final class Logf
 	
 	private Logf(){}
 
+	public static void f(String filePath, String tag, String format, Object ...args)
+	{
+		FileWriter writer = null;
+		try
+		{
+			File file = new File(filePath);
+			File dir = file.getParentFile();
+			if(!dir.exists() && !dir.isDirectory() && !dir.mkdirs())
+				return;
+
+			if(!file.exists())
+			{
+				if(!file.createNewFile())
+					return;
+			}
+			writer = new FileWriter(file, true);
+			String text = String.format("[%s@%s]", Common.Now(), tag) + String.format(format + System.getProperty("line.separator"), args);
+			writer.write(text);
+			writer.flush();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		finally {
+			try
+			{
+				if(writer != null)
+					writer.close();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public static void DumpException(Throwable e)
 	{
 		try
 		{
-			e(e instanceof Exception ? DEFAULT_RUNTIME_EXCEPTION_TAG : DEFAULT_RUNTIME_ERROR_TAG, Common.ThrowableToString(e));
+			String tag = e instanceof Exception ? DEFAULT_RUNTIME_EXCEPTION_TAG : DEFAULT_RUNTIME_ERROR_TAG;
+			String text = Common.ThrowableToString(e);
+			e(tag, text);
 		}
 		catch (Throwable t)
 		{
@@ -77,7 +121,6 @@ public final class Logf
 	{
 		v(null, format, args);
 	}
-	
 	public static void e(String tag, Object obj)
 	{
 		Log.e(tag == null ? DEFAULT_ERROR_TAG : tag, obj == null ? "null" : obj.toString());

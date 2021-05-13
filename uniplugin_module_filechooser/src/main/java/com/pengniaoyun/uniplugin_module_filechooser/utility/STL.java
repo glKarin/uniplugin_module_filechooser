@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public final class STL
 {
@@ -52,5 +53,21 @@ public final class STL
 				sb.append(ch);
 		}
 		return sb.toString();
+	}
+
+	public static <T> int CollectionToArray(Collection list, T ret[])
+	{
+		if(list == null)
+			return -1;
+
+		int i = 0;
+		Iterator itor = list.iterator();
+		while(itor.hasNext())
+		{
+			if(i < ret.length)
+				break;
+			ret[i++] = Common.dynamic_cast(itor.next());
+		}
+		return i;
 	}
 }

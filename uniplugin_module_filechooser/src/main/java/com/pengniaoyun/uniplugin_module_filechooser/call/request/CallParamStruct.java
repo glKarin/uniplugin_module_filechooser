@@ -51,6 +51,6 @@ public class CallParamStruct
 
     public void Set(JSONObject params)
     {
-        //this.json = params;
+        this.json = params;
     }
 }

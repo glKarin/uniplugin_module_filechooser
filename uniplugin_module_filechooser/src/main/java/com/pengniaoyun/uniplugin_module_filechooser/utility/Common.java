@@ -1,6 +1,8 @@
 package com.pengniaoyun.uniplugin_module_filechooser.utility;
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public final class Common
 {
@@ -54,5 +56,30 @@ public final class Common
 			Logf.DumpException(e);
 			return null;
 		}
+	}
+	public static String TimestampToStr(long ts)
+	{
+		SimpleDateFormat format;
+
+		format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return format.format(new Date(ts));
+	}
+
+	public static String TimestampToDateStr(long ts)
+	{
+		SimpleDateFormat format;
+
+		format = new SimpleDateFormat("yyyy-MM-dd");
+		return format.format(new Date(ts));
+	}
+
+	public static String Now()
+	{
+		return TimestampToStr(System.currentTimeMillis());
+	}
+
+	public static boolean ArrayIsEmpty(Object arr[])
+	{
+		return arr == null || arr.length == 0;
 	}
 }

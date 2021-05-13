@@ -16,4 +16,12 @@ public/* final*/ class Pair<T, U>
 	{
 		return new Pair<T, U>(t, u);
 	}
+
+	@Override
+	public String toString() {
+		return "Pair{" +
+				"first=" + first +
+				", second=" + second +
+				'}';
+	}
 }
