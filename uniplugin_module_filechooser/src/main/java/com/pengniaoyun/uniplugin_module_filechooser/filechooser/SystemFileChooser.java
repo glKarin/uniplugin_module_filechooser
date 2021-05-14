@@ -13,6 +13,7 @@ import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallRequestStru
 import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallFileChooserResultStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallResultStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.common.CallException;
+import com.pengniaoyun.uniplugin_module_filechooser.common.Constants;
 import com.pengniaoyun.uniplugin_module_filechooser.common.ModuleUtility;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.Common;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.FS;
@@ -125,9 +126,14 @@ public class SystemFileChooser extends FileChooser_base
                 if(data.getData() != null) // 单选
                 {
                     result.select_count = 1;
-                    String path = FS.UriPath(m_context, data.getData());
-                    Log("Single selection: " + data.getData());
-                    result.AddFile(path, mimes);
+                    Uri uri = data.getData();
+                    Log("Single selection: " + uri);
+                    String path = FS.UriPath(m_context, uri);
+                    Log("path -> " + path);
+                    if(Constants.ENUM_FILE_CHOOSER_TYPE_SYSTEM_DOCUMENT.equals(params.type))
+                        result.AddFile(path);
+                    else
+                        result.AddFile(path, mimes);
                 }
                 else // 多选
                 {
@@ -143,7 +149,11 @@ public class SystemFileChooser extends FileChooser_base
                             Uri uri = item.getUri();
                             Log("URI-" + i + " -> " + uri);
                             String path = FS.UriPath(m_context, uri);
-                            result.AddFile(path, mimes);
+                            Log("path-" + i + " -> " + path);
+                            if(Constants.ENUM_FILE_CHOOSER_TYPE_SYSTEM_DOCUMENT.equals(params.type))
+                                result.AddFile(path);
+                            else
+                                result.AddFile(path, mimes);
                         }
                     }
                 }

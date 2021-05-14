@@ -17,7 +17,8 @@ public class CallFileChooserResultStruct extends CallResultStruct<List<CallFileC
     public CallFileChooserResultStruct AddFile(String path)
     {
         CallFileChooserResultItemStruct item = CallFileChooserResultItemStruct.Make(path);
-        this.data.add(item);
+        if(item != null)
+            this.data.add(item);
         return this;
     }
 

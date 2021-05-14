@@ -151,7 +151,10 @@ public final class FS
                 } else if ("audio".equals(type)) {
                     contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
                 }
+                else
+                    contentUri = MediaStore.Files.getContentUri("external");
                 Logf.w("Media");
+                Logf.w(contentUri);
 
                 final String selection = "_id=?";
                 final String[] selectionArgs = new String[] {

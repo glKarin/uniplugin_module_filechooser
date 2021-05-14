@@ -10,6 +10,7 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONObject;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.Crypto;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.Common;
+import com.pengniaoyun.uniplugin_module_filechooser.utility.FS;
 
 public final class HttpUtility
 {
@@ -40,7 +41,8 @@ public final class HttpUtility
                 {
                     File file = (File)obj;
                     String filename = file.getName();
-                    String filetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl("file://" + file.getAbsolutePath()));
+                    String filetype = FS.FileMIME(file.getAbsolutePath());
+                    // String filetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl("file://" + file.getAbsolutePath()));
 
                     fis = new FileInputStream(file);
                     byte filedata[] = new byte[BUF_LEN];
