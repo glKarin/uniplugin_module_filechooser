@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    tools:context=".filechooser.FileChooserActivity"
+    android:orientation="vertical"
+    tools:showIn="@layout/file_chooser_page">
+
+    <TextView
+        android:id="@+id/file_browser_menu_delegate_name"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:textSize="18dp"
+        android:textColor="@color/file_menu_label_color"
+        android:ellipsize="start"
+        android:layout_marginLeft="5dp"/>
+
+    <TextView
+        android:id="@+id/file_browser_menu_delegate_path"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:maxLines="1"
+        android:textSize="16dp"
+        android:textColor="@color/file_menu_name_color"
+        android:ellipsize="start"
+        android:layout_marginLeft="5dp"/>
+
+</LinearLayout>

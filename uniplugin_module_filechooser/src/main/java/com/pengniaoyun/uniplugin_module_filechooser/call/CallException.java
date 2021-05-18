@@ -1,4 +1,4 @@
-package com.pengniaoyun.uniplugin_module_filechooser.common;
+package com.pengniaoyun.uniplugin_module_filechooser.call;
 
 public class CallException extends Exception
 {

@@ -1,4 +1,4 @@
-package com.pengniaoyun.uniplugin_module_filechooser.common;
+package com.pengniaoyun.uniplugin_module_filechooser.utility;
 
 import com.pengniaoyun.uniplugin_module_filechooser.call.EventListener;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.Common;

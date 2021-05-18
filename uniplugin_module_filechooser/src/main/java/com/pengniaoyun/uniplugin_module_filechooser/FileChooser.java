@@ -13,7 +13,9 @@ import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallFileUploadP
 import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallFileUploadResultStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.common.Constants;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallRequestStruct;
-import com.pengniaoyun.uniplugin_module_filechooser.common.ModuleUtility;
+import com.pengniaoyun.uniplugin_module_filechooser.filechooser.FileChooserActivity;
+import com.pengniaoyun.uniplugin_module_filechooser.filechooser.PageFileChooser;
+import com.pengniaoyun.uniplugin_module_filechooser.utility.ModuleUtility;
 import com.pengniaoyun.uniplugin_module_filechooser.filechooser.FileChooser_base;
 import com.pengniaoyun.uniplugin_module_filechooser.filechooser.SystemFileChooser;
 import com.pengniaoyun.uniplugin_module_filechooser.fileupload.FileUpload;
@@ -23,6 +25,8 @@ import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.VarRef;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.dcloud.feature.uniapp.annotation.UniJSMethod;
 import io.dcloud.feature.uniapp.bridge.UniJSCallback;
@@ -79,7 +83,7 @@ public class FileChooser extends UniModule
     @UniJSMethod(uiThread = true)
     public void OpenSystemDocumentFileChooser(JSONObject params, UniJSCallback callback, UniJSCallback failCallback, UniJSCallback finalCallback)
     {
-        Log("OpenSystemFileChooser");
+        Log("OpenSystemDocumentFileChooser");
         JSONObject newParams = (JSONObject)params.clone();
         newParams.put("type", Constants.ENUM_FILE_CHOOSER_TYPE_SYSTEM_DOCUMENT);
         OpenFileChooser(newParams, callback, failCallback, finalCallback);
@@ -91,6 +95,15 @@ public class FileChooser extends UniModule
         Log("OpenSystemFileChooser");
         JSONObject newParams = (JSONObject)params.clone();
         newParams.put("type", Constants.ENUM_FILE_CHOOSER_TYPE_SYSTEM);
+        OpenFileChooser(newParams, callback, failCallback, finalCallback);
+    }
+
+    @UniJSMethod(uiThread = true)
+    public void OpenPageFileChooser(JSONObject params, UniJSCallback callback, UniJSCallback failCallback, UniJSCallback finalCallback)
+    {
+        Log("OpenPageFileChooser");
+        JSONObject newParams = (JSONObject)params.clone();
+        newParams.put("type", Constants.ENUM_FILE_CHOOSER_TYPE_INTERNAL);
         OpenFileChooser(newParams, callback, failCallback, finalCallback);
     }
 
@@ -117,6 +130,10 @@ public class FileChooser extends UniModule
         else if(Constants.ENUM_FILE_CHOOSER_TYPE_SYSTEM_DOCUMENT.equalsIgnoreCase(type))
         {
             fileChooser = new SystemFileChooser(mUniSDKInstance.getContext(), SystemFileChooser.ContentType_e.CONTENT_TYPE_DOCUMENT);
+        }
+        else if(Constants.ENUM_FILE_CHOOSER_TYPE_INTERNAL.equalsIgnoreCase(type))
+        {
+            fileChooser = new PageFileChooser(mUniSDKInstance.getContext());
         }
         else
         {

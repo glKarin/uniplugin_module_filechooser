@@ -3,17 +3,12 @@ package com.pengniaoyun.uniplugin_module_filechooser.filechooser;
 import android.content.Context;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pengniaoyun.uniplugin_module_filechooser.FileChooser;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallRequestStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallFileChooserResultStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallResultStruct;
-import com.pengniaoyun.uniplugin_module_filechooser.common.ModuleUtility;
-import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
-
-import java.util.List;
+import com.pengniaoyun.uniplugin_module_filechooser.utility.ModuleUtility;
 
 import io.dcloud.feature.uniapp.bridge.UniJSCallback;
-import io.dcloud.feature.uniapp.utils.UniLogUtils;
 
 public abstract class FileChooser_base implements FileChooserInterface
 {

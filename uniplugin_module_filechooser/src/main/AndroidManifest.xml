@@ -2,4 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pengniaoyun.uniplugin_module_filechooser">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true">
+
+    <activity
+        android:name=".filechooser.FileChooserActivity"
+        android:label="文件选择"
+         />
+    </application>
+    <!--android:theme="@style/AppTheme"-->
+
 </manifest>

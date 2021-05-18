@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.pengniaoyun.uniplugin_module_filechooser.filechooser.FileChooserActivity">
+
+    <item android:id="@+id/file_chooser_menu_open_drawer"
+        android:showAsAction="always"
+        android:title="@string/file_chooser_menu_open"
+        tools:ignore="AppCompatResource" />
+</menu>

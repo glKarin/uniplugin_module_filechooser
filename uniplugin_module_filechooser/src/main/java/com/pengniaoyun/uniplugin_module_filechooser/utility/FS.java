@@ -24,6 +24,19 @@ public final class FS
 
     private FS() {}
 
+    public static String ExternalStorageFilePath(String filePath)
+    {
+        String path = Environment.getExternalStorageDirectory().getPath();
+        if(!TextUtils.isEmpty(filePath))
+        {
+            if(!filePath.startsWith(File.separator))
+                path += File.separator;
+            path += filePath;
+        }
+        //Logf.e(path);
+        return path;
+    }
+
     public static String FormatSize(long size)
     {
         if(size < KB)
@@ -68,7 +81,7 @@ public final class FS
             return null;
         }
         String fileName = file.getName();
-        if (fileName.equals("") || fileName.endsWith("."))
+        if (TextUtils.isEmpty(fileName) || fileName.endsWith("."))
         {
             return "";
         }
@@ -83,6 +96,21 @@ public final class FS
         }
     }
 
+    public static String GetFileCompleteSuffix(String path)
+    {
+        File file = new File(path);
+        if (!file.exists() || file.isDirectory())
+            return null;
+        String fileName = file.getName();
+        if (TextUtils.isEmpty(fileName))
+            return "";
+        int index = fileName.indexOf(".");
+        if (index > 0)
+            return fileName.substring(index + 1).toLowerCase();
+        else
+            return "";
+    }
+
     public static String FileMIME(String path)
     {
         String ext = MimeTypeMap.getFileExtensionFromUrl("file://" + path);
@@ -95,54 +123,77 @@ public final class FS
 
     public static String UriPath(final Context context, final Uri uri)
     {
+        ModuleUtility.Log("URIPath", "URI -> " + uri);
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
         // DocumentProvider
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            ModuleUtility.Log("URIPath", "URI is DocumentUri");
             // ExternalStorageProvider
             if (isExternalStorageDocument(uri)) {
+                ModuleUtility.Log("URIPath", "URI is ExternalStorage");
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
 
-                Logf.w("ExternalStorage");
                 if ("primary".equalsIgnoreCase(type)) {
+                    ModuleUtility.Log("URIPath", "ExternalStorage URI is primary");
                     return Environment.getExternalStorageDirectory() + "/" + split[1];
+                } else {
+                    ModuleUtility.Log("URIPath", "ExternalStorage URI is not primary");
+                    String path = "/storage/".concat(type).concat("/").concat(split[1]);
+                    return path;
                 }
-
-                // TODO handle non-primary volumes
             }
             // DownloadsProvider
             else if (isDownloadsDocument(uri)) {
 
-                Logf.w("Download");
+                ModuleUtility.Log("URIPath", "URI is Download");
                 final String id = DocumentsContract.getDocumentId(uri);
-                try
+                if(id.startsWith("raw:"))
                 {
-                    final Uri contentUri = ContentUris.withAppendedId(
-                            Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-                    return getDataColumn(context, contentUri, null, null);
-                }
-                catch (Exception e)
-                {
-                    Logf.DumpException(e);
                     Uri u = Uri.parse(id);
-                    if("raw".equalsIgnoreCase(u.getScheme()))
-                        return u.getPath();
-                    else
+                    ModuleUtility.Log("URIPath", "download URI is raw");
+                    return u.getPath();
+                }
+
+                //if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+                {
+                    final String DownloadPaths[] = {
+                        "content://downloads/public_downloads",
+                        "content://downloads/my_downloads",
+                        "content://downloads/all_downloads"
+                    };
+                    for (int i = 0; i < DownloadPaths.length; i++)
                     {
-                        throw e;
-                        // return null;
+                        String dp = DownloadPaths[i];
+                        ModuleUtility.Log("URIPath", "Try find(" + i + " - " + dp + ") -> " + id);
+                        try
+                        {
+                            long lid = Long.valueOf(id);
+                            ModuleUtility.Log("URIPath", "download URI id is " + lid);
+                            final Uri contentUri = ContentUris.withAppendedId(Uri.parse(dp), lid);
+
+                            return getDataColumn(context, contentUri, null, null);
+                        }
+                        catch (Exception e)
+                        {
+                            ModuleUtility.Log("URIPath", "download URI is not " + dp);
+                            Logf.DumpException(e);
+                        }
                     }
                 }
+                return null;
             }
             // MediaProvider
             else if (isMediaDocument(uri)) {
+                ModuleUtility.Log("URIPath", "URI is Media");
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
 
+                ModuleUtility.Log("URIPath", "Media type -> " + type);
+                ModuleUtility.Log("URIPath", "Media id -> " + split[1]);
                 Uri contentUri = null;
                 if ("image".equals(type)) {
                     contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
@@ -153,8 +204,7 @@ public final class FS
                 }
                 else
                     contentUri = MediaStore.Files.getContentUri("external");
-                Logf.w("Media");
-                Logf.w(contentUri);
+                ModuleUtility.Log("URIPath", "contentUri -> " + type + " " + (contentUri != null ? contentUri.toString() : "null"));
 
                 final String selection = "_id=?";
                 final String[] selectionArgs = new String[] {
@@ -166,18 +216,24 @@ public final class FS
         }
         // MediaStore (and general)
         else if ("content".equalsIgnoreCase(uri.getScheme())) {
-
-            Logf.w("Content");
+            ModuleUtility.Log("URIPath", "URI is Content");
             // Return the remote address
-            /*if (isGooglePhotosUri(uri))
-                return uri.getLastPathSegment();*/
+            if (isGooglePhotosUri(uri))
+            {
+                ModuleUtility.Log("URIPath", "URI is Content -> google");
+                return uri.getLastPathSegment();
+            }
 
             return getDataColumn(context, uri, null, null);
         }
         // File
         else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            Logf.w("File");
+            ModuleUtility.Log("URIPath", "URI is File");
             return uri.getPath();
+        }
+        else
+        {
+            ModuleUtility.Log("URIPath", "URI is unsupported");
         }
 
         return null;
@@ -244,5 +300,13 @@ public final class FS
      */
     public static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    /**
+     * @param uri The Uri to check.
+     * @return Whether the Uri authority is Google Photos.
+     */
+    public static boolean isGooglePhotosUri(Uri uri) {
+        return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
 }

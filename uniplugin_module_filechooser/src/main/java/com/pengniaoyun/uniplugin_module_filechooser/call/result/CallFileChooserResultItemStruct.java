@@ -31,7 +31,7 @@ public class CallFileChooserResultItemStruct
 
         String p = file.getAbsolutePath();
         String mime = FS.FileMIME(p);
-        if(!TextUtils.isEmpty(mime) && !Common.ArrayIsEmpty(mimes))
+        if(/*!TextUtils.isEmpty(mime) && */!Common.ArrayIsEmpty(mimes))
         {
             if(!FS.CompareMIME(mime, mimes))
                 return null;

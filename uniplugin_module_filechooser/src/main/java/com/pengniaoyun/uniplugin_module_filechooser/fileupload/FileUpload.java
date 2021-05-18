@@ -2,21 +2,14 @@ package com.pengniaoyun.uniplugin_module_filechooser.fileupload;
 
 import android.content.Context;
 
-import com.alibaba.fastjson.JSONObject;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallFileUploadParamStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallRequestStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallResultStruct;
-import com.pengniaoyun.uniplugin_module_filechooser.common.ModuleUtility;
-import com.pengniaoyun.uniplugin_module_filechooser.filechooser.FileChooserInterface;
+import com.pengniaoyun.uniplugin_module_filechooser.utility.ModuleUtility;
 import com.pengniaoyun.uniplugin_module_filechooser.network.HttpUtility;
-import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.VarRef;
 
-import java.io.File;
 import java.util.Map;
-
-import io.dcloud.feature.uniapp.bridge.UniJSCallback;
-import io.dcloud.feature.uniapp.utils.UniLogUtils;
 
 public class FileUpload implements FileUploadInterface
 {

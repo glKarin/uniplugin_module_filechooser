@@ -3,18 +3,14 @@ package com.pengniaoyun.uniplugin_module_filechooser.call.request;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pengniaoyun.uniplugin_module_filechooser.common.CallException;
+import com.pengniaoyun.uniplugin_module_filechooser.call.CallException;
 import com.pengniaoyun.uniplugin_module_filechooser.common.Constants;
-import com.pengniaoyun.uniplugin_module_filechooser.common.ModuleUtility;
+import com.pengniaoyun.uniplugin_module_filechooser.utility.ModuleUtility;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.Common;
-import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
-import com.pengniaoyun.uniplugin_module_filechooser.utility.STL;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 

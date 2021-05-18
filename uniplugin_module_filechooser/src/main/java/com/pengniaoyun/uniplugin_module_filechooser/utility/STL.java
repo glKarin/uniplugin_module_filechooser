@@ -64,10 +64,15 @@ public final class STL
 		Iterator itor = list.iterator();
 		while(itor.hasNext())
 		{
-			if(i < ret.length)
+			if(i >= ret.length)
 				break;
 			ret[i++] = Common.dynamic_cast(itor.next());
 		}
 		return i;
+	}
+
+	public static boolean CollectionIsEmpty(Collection list)
+	{
+		return list == null || list.isEmpty();
 	}
 }

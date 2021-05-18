@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/file_browser_title"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:ellipsize="start"
+        android:padding="2dp"
+        android:textSize="18dp"/>
+
+    <View
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dddddd"/>
+
+    <ListView
+        android:id="@+id/file_browser_list_view"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:dividerHeight="0.5dp"
+        android:layout_height="0dp">
+    </ListView>
+
+</LinearLayout>

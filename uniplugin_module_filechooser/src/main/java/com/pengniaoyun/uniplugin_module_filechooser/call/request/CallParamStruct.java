@@ -1,10 +1,11 @@
 package com.pengniaoyun.uniplugin_module_filechooser.call.request;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pengniaoyun.uniplugin_module_filechooser.common.ModuleUtility;
-import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
+import com.pengniaoyun.uniplugin_module_filechooser.utility.ModuleUtility;
 
-public class CallParamStruct
+import java.io.Serializable;
+
+public class CallParamStruct implements Serializable
 {
     public JSONObject json;
 

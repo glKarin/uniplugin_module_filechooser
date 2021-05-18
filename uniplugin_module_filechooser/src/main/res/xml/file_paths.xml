@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-path path="Android/data/com.youtushuju.lingdongapp" name="app_files_root"/>
+    <external-path path="ling_dong_app" name="app_work_root"/>
+    <external-path path="." name="external_storage_root"/>
+</paths>

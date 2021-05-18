@@ -2,6 +2,7 @@ package com.pengniaoyun.uniplugin_module_filechooser.common;
 
 import android.text.TextUtils;
 
+import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.Pair;
 
 import java.util.Objects;
@@ -82,8 +83,7 @@ public final class MIME
         // image/*
         if(!"*".equals(targetMime.secondary_type))
         {
-            if(this.Compare(targetMime))
-                return true;
+            return(this.Compare(targetMime));
         }
 
         // image/png
