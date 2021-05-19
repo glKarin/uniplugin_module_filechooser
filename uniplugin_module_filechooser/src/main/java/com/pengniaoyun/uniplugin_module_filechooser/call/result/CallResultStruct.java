@@ -20,4 +20,9 @@ public class CallResultStruct<T>
         this.data = data;
         //this.success = data != null;
     }
+
+    public Object MakeResult()
+    {
+        return null;
+    }
 }

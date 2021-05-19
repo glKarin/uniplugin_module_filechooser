@@ -10,11 +10,11 @@ import com.pengniaoyun.uniplugin_module_filechooser.call.CallbackPool;
 import com.pengniaoyun.uniplugin_module_filechooser.call.EventListener;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallFileChooserParamStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallFileUploadParamStruct;
+import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallFileChooserSupportResultStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.call.result.CallFileUploadResultStruct;
 import com.pengniaoyun.uniplugin_module_filechooser.common.Constants;
 import com.pengniaoyun.uniplugin_module_filechooser.call.request.CallRequestStruct;
-import com.pengniaoyun.uniplugin_module_filechooser.filechooser.FileChooserActivity;
-import com.pengniaoyun.uniplugin_module_filechooser.filechooser.PageFileChooser;
+import com.pengniaoyun.uniplugin_module_filechooser.filechooser.InternalFileChooser;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.ModuleUtility;
 import com.pengniaoyun.uniplugin_module_filechooser.filechooser.FileChooser_base;
 import com.pengniaoyun.uniplugin_module_filechooser.filechooser.SystemFileChooser;
@@ -25,8 +25,6 @@ import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.VarRef;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import io.dcloud.feature.uniapp.annotation.UniJSMethod;
 import io.dcloud.feature.uniapp.bridge.UniJSCallback;
@@ -133,7 +131,7 @@ public class FileChooser extends UniModule
         }
         else if(Constants.ENUM_FILE_CHOOSER_TYPE_INTERNAL.equalsIgnoreCase(type))
         {
-            fileChooser = new PageFileChooser(mUniSDKInstance.getContext());
+            fileChooser = new InternalFileChooser(mUniSDKInstance.getContext());
         }
         else
         {
@@ -287,5 +285,13 @@ public class FileChooser extends UniModule
     {
         EventListener table = EventListener.Instance();
         table.RemoveEventListener(name);
+    }
+
+    @UniJSMethod(uiThread = true)
+    public void GetSupportFileChooser(UniJSCallback callback)
+    {
+        CallFileChooserSupportResultStruct res = new CallFileChooserSupportResultStruct();
+        res.FillAll();
+        ModuleUtility.CallUniJSCallback(callback, res.MakeResult());
     }
 }

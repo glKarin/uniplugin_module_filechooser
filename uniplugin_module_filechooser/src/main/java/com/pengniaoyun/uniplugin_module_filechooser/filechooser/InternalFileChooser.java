@@ -15,9 +15,9 @@ import com.pengniaoyun.uniplugin_module_filechooser.utility.Common;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.FS;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.ModuleUtility;
 
-public class PageFileChooser extends FileChooser_base
+public class InternalFileChooser extends FileChooser_base
 {
-    public PageFileChooser(Context context)
+    public InternalFileChooser(Context context)
     {
         super(context);
     }
@@ -64,7 +64,9 @@ public class PageFileChooser extends FileChooser_base
                     {
                         String path = files[i];
                         Log("file-" + i + " -> " + path);
-                        result.AddFile(path);
+                        boolean res = result.AddFile(path);
+                        if(res)
+                            AddHistory(path);
                     }
                 }
             }

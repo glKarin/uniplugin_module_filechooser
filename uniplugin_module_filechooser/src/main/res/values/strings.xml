@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Harmttan文件选择器</string>
+    <string name="app_name">Uniplugin文件选择器</string>
     <string name="title_activity_file_chooser">文件选择</string>
     <string name="file_chooser_menu_open">选择</string>
 

@@ -14,6 +14,7 @@ import android.webkit.MimeTypeMap;
 import com.pengniaoyun.uniplugin_module_filechooser.common.MIME;
 
 import java.io.File;
+import java.util.Collection;
 
 public final class FS
 {
@@ -56,6 +57,29 @@ public final class FS
             return false;
 
         if(targets.length == 0)
+            return true;
+
+        MIME inMime = MIME.Make(in);
+        if(inMime == null)
+            return false;
+
+        for (String target : targets)
+        {
+            MIME targetMime = MIME.Make(target);
+            if(targetMime == null)
+                continue;
+            if(inMime.IsSame(targetMime))
+                return true;
+        }
+        return false;
+    }
+
+    public static boolean CompareMIME(String in, Collection<String> targets)
+    {
+        if(TextUtils.isEmpty(in))
+            return false;
+
+        if(STL.CollectionIsEmpty(targets))
             return true;
 
         MIME inMime = MIME.Make(in);

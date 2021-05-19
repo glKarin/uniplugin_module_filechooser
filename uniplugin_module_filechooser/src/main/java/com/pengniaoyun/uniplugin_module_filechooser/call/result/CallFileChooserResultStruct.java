@@ -14,19 +14,28 @@ public class CallFileChooserResultStruct extends CallResultStruct<List<CallFileC
         super(param, new ArrayList<CallFileChooserResultItemStruct>());
     }
 
-    public CallFileChooserResultStruct AddFile(String path)
+    public boolean AddFile(String path)
     {
         CallFileChooserResultItemStruct item = CallFileChooserResultItemStruct.Make(path);
         if(item != null)
+        {
             this.data.add(item);
-        return this;
+            return true;
+        }
+        return false;
     }
 
-    public CallFileChooserResultStruct AddFile(String path, String mime[])
+    public boolean AddFile(String path, String mime[])
     {
-        CallFileChooserResultItemStruct item = CallFileChooserResultItemStruct.MakeIfInMime(path, mime);
-        if(item != null)
-            this.data.add(item);
-        return this;
+        return AddFile(path, null);
+    }
+
+    public Object MakeResult()
+    {
+        JSONObject map = new JSONObject();
+        map.put("count", data.size());
+        map.put("data", data);
+        map.put("select_count", select_count);
+        return map;
     }
 }

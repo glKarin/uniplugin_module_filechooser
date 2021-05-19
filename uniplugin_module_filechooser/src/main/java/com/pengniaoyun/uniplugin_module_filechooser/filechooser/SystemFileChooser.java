@@ -126,10 +126,13 @@ public class SystemFileChooser extends FileChooser_base
                     Log("Single selection: " + uri);
                     String path = FS.UriPath(m_context, uri);
                     Log("path -> " + path);
+                    boolean res = false;
                     if(Constants.ENUM_FILE_CHOOSER_TYPE_SYSTEM_DOCUMENT.equals(params.type))
-                        result.AddFile(path);
+                        res = result.AddFile(path);
                     else
-                        result.AddFile(path, mimes);
+                        res = result.AddFile(path, mimes);
+                    if(res)
+                        AddHistory(path);
                 }
                 else // 多选
                 {
@@ -146,10 +149,13 @@ public class SystemFileChooser extends FileChooser_base
                             Log("URI-" + i + " -> " + uri);
                             String path = FS.UriPath(m_context, uri);
                             Log("path-" + i + " -> " + path);
+                            boolean res = false;
                             if(Constants.ENUM_FILE_CHOOSER_TYPE_SYSTEM_DOCUMENT.equals(params.type))
-                                result.AddFile(path);
+                                res = result.AddFile(path);
                             else
-                                result.AddFile(path, mimes);
+                                res = result.AddFile(path, mimes);
+                            if(res)
+                                AddHistory(path);
                         }
                     }
                 }

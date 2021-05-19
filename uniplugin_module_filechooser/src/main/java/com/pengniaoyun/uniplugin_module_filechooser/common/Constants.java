@@ -11,6 +11,7 @@ public final class Constants
     public static final String ENUM_MODULE_ACTION_OPEN_FILE_CHOOSER = "open_file_chooser";
     public static final String ENUM_MODULE_ACTION_FILE_UPLOAD = "file_upload";
     public static final String ENUM_MODULE_ACTION_FILE_LOG = "log";
+    public static final String ENUM_MODULE_ACTION_GET_SUPPORT_CHOOSER = "get_support_chooser";
 
     public static final String ENUM_FILE_CHOOSER_TYPE_SYSTEM = "system";
     public static final String ENUM_FILE_CHOOSER_TYPE_SYSTEM_DOCUMENT = "system_document";

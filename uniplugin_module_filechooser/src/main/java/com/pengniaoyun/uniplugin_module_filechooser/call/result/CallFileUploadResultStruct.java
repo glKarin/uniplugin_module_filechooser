@@ -36,4 +36,9 @@ public class CallFileUploadResultStruct extends CallResultStruct
             this.data = text;
         return this;
     }
+
+    public Object MakeResult()
+    {
+        return data;
+    }
 }
