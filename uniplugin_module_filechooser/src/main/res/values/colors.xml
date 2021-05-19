@@ -4,10 +4,18 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="black_overlay">#66000000</color>
+    <color name="file_chooser_action_bar_color">#FF2979FF</color>
 
-    <color name="file_menu_label_color">#FFFFFFFF</color>
-    <color name="file_menu_name_color">#FFCCCCCC</color>
+    <color name="file_menu_label_color">#FF000000</color>
+    <color name="file_menu_name_color">#FF666666</color>
+    <color name="file_menu_background_color">#FFFFFFFF</color>
+    <color name="file_menu_title_text_color">#FFFFFFFF</color>
+
+    <color name="file_list_title_color">#FF000000</color>
+
+    <color name="file_list_delegate_name_color">#FF666666</color>
+    <color name="file_list_delegate_name_disable_color">#FF999999</color>
+    <color name="file_list_delegate_name_folder_color">#FF333333</color>
 
     <color name="system_info_path_color">#FF87CEFA</color>
 </resources>

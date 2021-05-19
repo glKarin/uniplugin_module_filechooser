@@ -64,7 +64,7 @@ public class FileEngine extends FileEngine_base
         SortFileList();
 
         // 添加上级目录
-        if(!m_ignoreDotDot)
+        if(!m_ignoreDotDot && !IsInRoot(path))
         {
             FileModel item = MakeFileModelAsParent(dir);
             if(item != null)

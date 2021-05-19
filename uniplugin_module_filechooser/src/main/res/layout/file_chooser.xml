@@ -14,6 +14,7 @@
         android:maxLines="1"
         android:ellipsize="start"
         android:padding="2dp"
+        android:textColor="@color/file_list_title_color"
         android:textSize="18dp"/>
 
     <View

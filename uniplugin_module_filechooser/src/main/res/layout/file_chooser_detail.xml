@@ -19,8 +19,7 @@
             android:text="文件名: "
             android:textSize="16dp"/>
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start|top"
             android:id="@+id/file_chooser_detail_name"
@@ -40,8 +39,7 @@
             android:text="路径: "
             android:textSize="16dp"/>
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start|top"
             android:id="@+id/file_chooser_detail_path"
@@ -61,8 +59,7 @@
             android:text="大小: "
             android:textSize="16dp"/>
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start|top"
             android:id="@+id/file_chooser_detail_size"
@@ -82,8 +79,7 @@
             android:text="类型: "
             android:textSize="16dp"/>
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start|top"
             android:id="@+id/file_chooser_detail_mime"
@@ -91,29 +87,6 @@
     </LinearLayout>
 
     <include layout="@layout/divider"/>
-<!--
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="start|top"
-            android:layout_marginRight="5dp"
-            android:text="创建时间: "
-            android:textSize="16dp"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:gravity="start|top"
-            android:id="@+id/file_chooser_detail_create_time"
-            android:textSize="13dp"/>
-    </LinearLayout>
--->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -128,35 +101,12 @@
             android:text="最近修改时间: "
             android:textSize="16dp"/>
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start|top"
             android:id="@+id/file_chooser_detail_modify_time"
             android:textSize="13dp"/>
     </LinearLayout>
-<!--
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="start|top"
-            android:layout_marginRight="5dp"
-            android:text="最近访问时间: "
-            android:textSize="16dp"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:gravity="start|top"
-            android:id="@+id/file_chooser_detail_access_time"
-            android:textSize="13dp"/>
-    </LinearLayout>
-            -->
 
     <include layout="@layout/divider"/>
 
@@ -173,8 +123,7 @@
             android:text="是否可读: "
             android:textSize="16dp"/>
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start|top"
             android:id="@+id/file_chooser_detail_read"
@@ -194,8 +143,7 @@
             android:text="是否可写: "
             android:textSize="16dp"/>
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start|top"
             android:id="@+id/file_chooser_detail_write"
@@ -215,8 +163,7 @@
             android:text="是否可执行: "
             android:textSize="16dp"/>
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start|top"
             android:id="@+id/file_chooser_detail_exec"
@@ -236,8 +183,7 @@
             android:text="是否隐藏: "
             android:textSize="16dp"/>
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start|top"
             android:id="@+id/file_chooser_detail_hidden"

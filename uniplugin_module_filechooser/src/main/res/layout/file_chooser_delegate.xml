@@ -29,6 +29,7 @@
             android:gravity="center_vertical"
             android:ellipsize="middle"
             android:maxLines="1"
+            android:textColor="@color/file_list_delegate_name_color"
             android:textSize="18dp"/>
 
         <LinearLayout

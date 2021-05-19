@@ -8,6 +8,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -17,6 +20,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -64,12 +68,14 @@ public class FileChooserActivity extends Activity {
     private boolean m_inited = false;
     private Set<FileModel> m_chooseFiles = new HashSet<FileModel>();
     private int m_currentPage = 0;
+    private FileMenuListAdapter m_pageAdapter;
 
     private Map<String, Integer> m_iconMap = null;
     private Map<String, Integer> m_idMap = null;
     private Set<String> m_mimes = new HashSet<String>();
     private boolean m_multiple = false;
     private String m_mime = "*/*";
+    private Menu m_menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,12 +126,15 @@ public class FileChooserActivity extends Activity {
             }
         });
 
+        int color = getResources().getColor(GetResId("color.file_chooser_action_bar_color"));
+        //m_drawerLayout.setScrimColor(Color.TRANSPARENT);
         ActionBar actionBar = getActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         ActionBarDrawerToggle mToggle = new ActionBarDrawerToggle(this, m_drawerLayout, 0, 0);
         mToggle.syncState();
         m_drawerLayout.addDrawerListener(mToggle);
+        actionBar.setBackgroundDrawable(new ColorDrawable(color));
 
         SetupUI();
         ModuleUtility.Log(ID_TAG, "创建文件选择器Activity");
@@ -133,10 +142,8 @@ public class FileChooserActivity extends Activity {
 
     private void SetupUI()
     {
-        FileMenuListAdapter adapter;
-
-        adapter = new FileMenuListAdapter(this);
-        m_menuView.setAdapter(adapter);
+        m_pageAdapter = new FileMenuListAdapter(this);
+        m_menuView.setAdapter(m_pageAdapter);
         m_menuView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -268,12 +275,14 @@ public class FileChooserActivity extends Activity {
                 engine.SetMIMEs(m);
             }
         }
+        engine.SetShowHidden(false);
         return engine;
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         int id = GetResId("menu.file_chooser_page_menu");
         getMenuInflater().inflate(id, menu);
+        m_menu = menu;
         return true;
     }
 
@@ -298,25 +307,26 @@ public class FileChooserActivity extends Activity {
 
             menuList = new ArrayList<FileMenuModel>();
             m_inited = true;
-            item = new FileMenuModel("外部存储", FS.ExternalStorageFilePath(null), 0, true);
+
+            item = new FileMenuModel("下载", FS.ExternalStorageFilePath("/Download"), 0,false);
             menuList.add(item);
 
-            item = new FileMenuModel("微信", FS.ExternalStorageFilePath("/Android/data/com.tencent.mm/MicroMsg/Download"), 0, true);
+            item = new FileMenuModel("文档", FS.ExternalStorageFilePath("/Documents"), 0,false);
             menuList.add(item);
 
-            item = new FileMenuModel("QQ", FS.ExternalStorageFilePath("/Android/data/com.tencent.mobileqq/Tencent/QQfile_recv"), 0,true);
+            item = new FileMenuModel("微信", FS.ExternalStorageFilePath("/Android/data/com.tencent.mm/MicroMsg/Download"), 0, false);
             menuList.add(item);
 
-            item = new FileMenuModel("下载", FS.ExternalStorageFilePath("/Download"), 0,true);
+            item = new FileMenuModel("QQ", FS.ExternalStorageFilePath("/Android/data/com.tencent.mobileqq/Tencent/QQfile_recv"), 0,false);
             menuList.add(item);
 
-            item = new FileMenuModel("文档", FS.ExternalStorageFilePath("/Documents"), 0,true);
+            item = new FileMenuModel("外部存储", FS.ExternalStorageFilePath(null), 0, false);
             menuList.add(item);
 
-            item = new FileMenuModel("最近选择", ":history", 0,true);
+            item = new FileMenuModel("最近选择", ":history", 0,false);
             menuList.add(item);
 
-            ((FileMenuListAdapter)m_menuView.getAdapter()).SetData(menuList);
+            m_pageAdapter.SetData(menuList);
             m_viewPager.setAdapter(new FileViewPagerAdapter(menuList));
 
             Bundle bundle = getIntent().getExtras();
@@ -330,9 +340,10 @@ public class FileChooserActivity extends Activity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        int openId = GetResId("id.file_chooser_menu_open_drawer");
-        ModuleUtility.Log(ID_TAG, "" + openId + "  " + item.getItemId());
-        if(item.getItemId() == openId)
+        int openId = GetResId("id.file_chooser_menu_choose");
+        int showHiddenId = GetResId("id.file_chooser_menu_hidden_file");
+        int id = item.getItemId();
+        if(id == openId)
         {
             Intent intent = new Intent();
             String files[] = null;
@@ -350,7 +361,19 @@ public class FileChooserActivity extends Activity {
             finish();
             return true;
         }
-        else if(item.getItemId() == android.R.id.home)
+        else if(id == showHiddenId)
+        {
+            item.setChecked(!item.isChecked());
+            for (int i = 0; i < m_pageAdapter.getCount(); i++)
+            {
+                FileMenuModel menuItem = m_pageAdapter.getItem(i);
+                if(menuItem.fileView == null || menuItem.fileView.m_adapter == null)
+                    continue;
+                menuItem.fileView.m_adapter.SetShowHidden(item.isChecked());
+            }
+            return true;
+        }
+        else if(id == android.R.id.home)
         {
             if(m_drawerLayout.isDrawerOpen(Gravity.LEFT))
                 m_drawerLayout.closeDrawer(Gravity.LEFT, true);
@@ -426,12 +449,28 @@ public class FileChooserActivity extends Activity {
             m_chooseFiles.add(file);
         else
             m_chooseFiles.remove(file);
+        UpdateChooseButton();
     }
 
     private void ClearChooseFile()
     {
         m_chooseFiles.clear();
         ((FileViewPagerAdapter)m_viewPager.getAdapter()).ClearChoose(m_currentPage);
+        UpdateChooseButton();
+    }
+
+    private void UpdateChooseButton()
+    {
+        if(m_menu == null)
+            return;
+        MenuItem menuItem = m_menu.findItem(GetResId("id.file_chooser_menu_choose"));
+        if(m_chooseFiles.isEmpty())
+            menuItem.setVisible(false);
+        else
+        {
+            menuItem.setTitle(getResources().getString(GetResId("string.file_chooser_menu_open")) + " (" + m_chooseFiles.size() + "项)");
+            menuItem.setVisible(true);
+        }
     }
 
     private void SetCurrentPage(int page)
@@ -537,15 +576,17 @@ public class FileChooserActivity extends Activity {
     {
         private FileEngine_base m_fileEngine;
         private TextView m_partner;
+        private ListView m_listView;
 
-        public FileViewAdapter(Context context, String path, TextView partner)
+        public FileViewAdapter(Context context, String path, TextView partner, ListView listView)
         {
             super(context, FileChooserActivity.this.GetResId("layout.file_chooser_delegate"));
             m_partner = partner;
+            m_listView = listView;
             m_fileEngine = FileChooserActivity.this.CreateFileEngine(path);
             ResetData(m_fileEngine.FileList());
             if(m_partner != null && m_fileEngine instanceof FileHistoryEngine)
-                m_partner.setText(":当前历史记录 " + getCount() + "条");
+                m_partner.setText(":最近选择记录 " + getCount() + "条");
             m_fileEngine.SetOnCurrentChangedListener(new FileEngine.FileBrowserCurrentChangedListener() {
                 @Override
                 public void OnCurrentChanged(FileEngine_base browser, int mask) {
@@ -554,10 +595,15 @@ public class FileChooserActivity extends Activity {
                     {
                         ResetData(browser.FileList());
                         if(m_partner != null && m_fileEngine instanceof FileHistoryEngine)
-                            m_partner.setText(":当前历史记录 " + getCount() + "条");
+                            m_partner.setText(":文件选择记录 " + getCount() + "条");
                     }
-                    if(m_partner != null && ((mask & ID_FILE_BROWSER_CURRENT_CHANGE_PATH) != 0) && m_fileEngine instanceof FileEngine)
-                        m_partner.setText(browser.CurrentPath());
+                    if((mask & ID_FILE_BROWSER_CURRENT_CHANGE_PATH) != 0)
+                    {
+                        if(m_partner != null && m_fileEngine instanceof FileEngine)
+                            m_partner.setText(browser.CurrentPath());
+                        // m_listView.smoothScrollToPosition(0);
+                        m_listView.setSelection(0);
+                    }
                 }
             });
         }
@@ -588,8 +634,15 @@ public class FileChooserActivity extends Activity {
             }
 
             FileEngine.FileModel data = model.data;
+            boolean ok = data.type != FileEngine.FileModel.ID_FILE_TYPE_DIRECTORY && FileChooserActivity.this.CompareFileMIME(data.mime);
             textView = viewHolder.<TextView>Get_T("id.file_browser_delegate_name");
             textView.setText(data.name);
+            int color;
+            if(data.type == FileEngine.FileModel.ID_FILE_TYPE_DIRECTORY)
+                color = getResources().getColor(GetResId("color.file_list_delegate_name_folder_color"));
+            else
+                color = getResources().getColor(GetResId(ok ? "color.file_list_delegate_name_color" : "color.file_list_delegate_name_disable_color"));
+            textView.setTextColor(color);
             textView = viewHolder.<TextView>Get_T("id.file_browser_delegate_size");
             textView.setText(FS.FormatSize(data.size));
             textView = viewHolder.<TextView>Get_T("id.file_browser_delegate_time");
@@ -620,7 +673,7 @@ public class FileChooserActivity extends Activity {
             }
             else
             {
-                checkbox.setEnabled(FileChooserActivity.this.CompareFileMIME(data.mime));
+                checkbox.setEnabled(ok);
                 checkbox.setVisibility(View.VISIBLE);
                 checkbox.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -657,6 +710,16 @@ public class FileChooserActivity extends Activity {
         {
             m_fileEngine.SetCurrentPath(path);
         }
+
+        public void SetRoot(String root)
+        {
+            m_fileEngine.SetRoot(root);
+        }
+
+        public void SetShowHidden(boolean b)
+        {
+            m_fileEngine.SetShowHidden(b);
+        }
     }
 
     private class FileView
@@ -675,7 +738,7 @@ public class FileChooserActivity extends Activity {
         {
             ListView listView = GetListView();
             int id = FileChooserActivity.this.GetResId("id.file_browser_title");
-            m_adapter = new FileViewAdapter(view.getContext(), path != null && path.startsWith(":") ? path : null, (TextView)view.findViewById(id));
+            m_adapter = new FileViewAdapter(view.getContext(), path != null && path.startsWith(":") ? path : null, (TextView)view.findViewById(id), listView);
             listView.setAdapter(m_adapter);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -696,11 +759,6 @@ public class FileChooserActivity extends Activity {
             listView = (ListView)view.findViewById(id);
             return listView;
         }
-
-        public void SetPath(String path)
-        {
-            m_adapter.SetPath(path);
-        }
     }
 
     private class FileMenuModel
@@ -708,14 +766,14 @@ public class FileChooserActivity extends Activity {
         public String label;
         public String name;
         public int icon;
-        public boolean enabled = true;
+        public boolean can_go_up = true;
         public FileView fileView = null;
 
-        public FileMenuModel(String label, String name, int icon, boolean enabled) {
+        public FileMenuModel(String label, String name, int icon, boolean can_go_up) {
             this.label = label;
             this.name = name;
             this.icon = icon;
-            this.enabled = enabled;
+            this.can_go_up = can_go_up;
         }
     }
 
@@ -780,7 +838,9 @@ public class FileChooserActivity extends Activity {
                 View view = li.inflate(id, null, false);
                 item.fileView = new FileView(view, item.name);
             }
-            item.fileView.SetPath(item.name);
+            if(!item.can_go_up)
+                item.fileView.m_adapter.SetRoot(item.name);
+            item.fileView.m_adapter.SetPath(item.name);
             container.addView(item.fileView.view);
             return item.fileView.view;
         }

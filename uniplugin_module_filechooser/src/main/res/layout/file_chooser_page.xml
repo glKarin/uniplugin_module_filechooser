@@ -21,14 +21,22 @@
             android:layout_gravity="top"/>
     </android.support.v4.view.ViewPager>
 
-    <ListView
-        android:id="@+id/file_browser_menu"
-        android:layout_width="240dp"
+    <LinearLayout
+        android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/colorPrimary"
-        android:choiceMode="singleChoice"
-        android:divider="#999999"
-        android:dividerHeight="0.5dp" />
+        android:orientation="vertical"
+        android:background="@color/file_menu_background_color">
+
+        <ListView
+            android:id="@+id/file_browser_menu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/file_menu_background_color"
+            android:choiceMode="singleChoice"
+            android:divider="#cccccc"
+            android:dividerHeight="0.5dp" />
+    </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

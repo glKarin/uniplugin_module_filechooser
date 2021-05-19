@@ -3,8 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.pengniaoyun.uniplugin_module_filechooser.filechooser.FileChooserActivity">
 
-    <item android:id="@+id/file_chooser_menu_open_drawer"
+    <item android:id="@+id/file_chooser_menu_choose"
         android:showAsAction="always"
-        android:title="@string/file_chooser_menu_open"
+        android:title=""
+        android:visible="false"
+        tools:ignore="AppCompatResource" />
+
+    <item android:id="@+id/file_chooser_menu_hidden_file"
+        android:showAsAction="never"
+        android:checkable="true"
+        android:title="@string/file_chooser_menu_hidden_file"
         tools:ignore="AppCompatResource" />
 </menu>

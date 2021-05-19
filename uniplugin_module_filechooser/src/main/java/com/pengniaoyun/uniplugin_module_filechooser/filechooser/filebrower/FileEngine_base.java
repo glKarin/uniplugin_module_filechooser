@@ -3,6 +3,7 @@ package com.pengniaoyun.uniplugin_module_filechooser.filechooser.filebrower;
 import android.text.TextUtils;
 
 import com.pengniaoyun.uniplugin_module_filechooser.utility.FS;
+import com.pengniaoyun.uniplugin_module_filechooser.utility.Logf;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.STL;
 import com.pengniaoyun.uniplugin_module_filechooser.utility.VarRef;
 
@@ -37,6 +38,7 @@ public abstract class FileEngine_base {
     protected boolean m_showHidden = true;
     protected boolean m_ignoreDotDot = false;
     protected FileBrowserCurrentChangedListener m_onCurrentChangedListener;
+    protected String m_root = "/";
 
     public FileEngine_base()
     {
@@ -49,7 +51,7 @@ public abstract class FileEngine_base {
 
     public FileEngine_base SetCurrentPath(String path)
     {
-        if(path != null && !path.equals(m_currentPath))
+        if(path != null && !path.equals(m_currentPath) && CanOpen(path))
         {
             if(ListFiles(path))
             {
@@ -103,6 +105,32 @@ public abstract class FileEngine_base {
             ListFiles(m_currentPath);
         }
         return this;
+    }
+
+    public FileEngine_base SetRoot(String root) {
+        if(m_root != root)
+        {
+            this.m_root = root;
+            ListFiles(m_currentPath);
+        }
+        return this;
+    }
+
+    protected boolean CanOpen(String path)
+    {
+        if(TextUtils.isEmpty(path))
+            return false;
+        if(TextUtils.isEmpty(m_root))
+            return true;
+        if(IsInRoot(path))
+            return true;
+        return(path.startsWith(m_root));
+    }
+
+    protected boolean IsInRoot(String path)
+    {
+        String root = TextUtils.isEmpty(m_root) ? "/" : m_root;
+        return(root.equals(path));
     }
 
     public FileEngine_base SetOrder(int i) {
@@ -173,9 +201,13 @@ public abstract class FileEngine_base {
         if(check && !FilterFile(f))
             return null;
 
+        if(!m_showHidden && f.isHidden())
+            return null;
+
         String name = f.getName();
         if(".".equals(name))
             return null;
+
         if(f.isDirectory())
             name += File.separator;
 

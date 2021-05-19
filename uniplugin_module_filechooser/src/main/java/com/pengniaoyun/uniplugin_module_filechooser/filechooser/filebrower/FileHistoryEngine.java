@@ -21,6 +21,18 @@ public class FileHistoryEngine extends FileEngine_base
         m_order = ID_ORDER_BY_TIME;
     }
 
+    public FileEngine_base SetCurrentPath(String path)
+    {
+        m_currentPath = path;
+        ListFiles(path);
+        return this;
+    }
+
+    @Override
+    protected boolean CanOpen(String path) {
+        return false;
+    }
+
     protected boolean ListFiles(String path)
     {
         List<FileHistoryRecorder.FileHistoryItem> files;
